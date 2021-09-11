@@ -1,4 +1,12 @@
+***************QC and clustering************************
 library(Seurat)
 library(dplyr)
+library(harmony)
 ovary_count<-Read10X("/media/disk1/RNA-seq/ovary_aggr/outs/filtered_feature_bc_matrix/")
 ovary<- CreateSeuratObject(counts = ovary_count, project = "ovary", min.cells = 3, min.features = 200)
+ovary[["percent.mt"]] <- PercentageFeatureSet(ovary, pattern = "^MT-")
+ovary<- subset(ovary, subset = nFeature_RNA > 200 & nFeature_RNA < 6000 & percent.mt < 15)
+ovary<- NormalizeData(ovary, normalization.method = "LogNormalize", scale.factor = 10000)
+ovary<- FindVariableFeatures(ovary, selection.method = "vst", nfeatures = 2100)
+all.genes <- rownames(ovary)
+ovary<- ScaleData(ovary, features = all.genes)
