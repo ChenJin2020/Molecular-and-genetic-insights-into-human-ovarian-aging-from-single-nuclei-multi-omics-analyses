@@ -10,3 +10,4 @@ ovary<- NormalizeData(ovary, normalization.method = "LogNormalize", scale.factor
 ovary<- FindVariableFeatures(ovary, selection.method = "vst", nfeatures = 2100)
 all.genes <- rownames(ovary)
 ovary<- ScaleData(ovary, features = all.genes)
+ovary<- RunPCA(ovary, features = VariableFeatures(object = ovary))
