@@ -44,3 +44,6 @@ BEC_aging_markers<-FindMarkers(ovary, ident.1 = "old", ident.2 ="young",subset.i
 GC_aging_markers<-FindMarkers(ovary, ident.1 = "old", ident.2 ="young",subset.ident = "Granulosa_cell",group.by="group", min.pct = 0.25,logfc.threshold=0.25,test.use="MAST")
 SMC_aging_markers<-FindMarkers(ovary, ident.1 = "old", ident.2 ="young",subset.ident = "Smooth_muscle_cell",group.by="group", min.pct = 0.25,logfc.threshold=0.25,test.use="MAST")
 IC_aging_markers<-FindMarkers(ovary, ident.1 = "old", ident.2 ="young",subset.ident = "Immune_cell",group.by="group", min.pct = 0.25,logfc.threshold=0.25,test.use="MAST")
+LEC_aging_markers<-FindMarkers(ovary, ident.1 = "old", ident.2 ="young",subset.ident = "Lymphatic_endothelial_cell",group.by="group", min.pct = 0.25,logfc.threshold=0.25,test.use="MAST")
+EpiC_aging_markers<-FindMarkers(ovary, ident.1 = "old", ident.2 ="young",subset.ident = "Epithelial_cell",group.by="group", min.pct = 0.25,logfc.threshold=0.25,test.use="MAST")
+TC_aging_markers<-FindMarkers(ovary, ident.1 = "old", ident.2 ="young",subset.ident = "Theca_cell",group.by="group", min.pct = 0.25,logfc.threshold=0.25,test.use="MAST")
