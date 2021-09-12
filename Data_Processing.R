@@ -11,3 +11,30 @@ ovary<- FindVariableFeatures(ovary, selection.method = "vst", nfeatures = 2100)
 all.genes <- rownames(ovary)
 ovary<- ScaleData(ovary, features = all.genes)
 ovary<- RunPCA(ovary, features = VariableFeatures(object = ovary))
+
+
+***************clustering************************
+library(Seurat)
+library(dplyr)
+library(harmony)
+ovary_count<-read.table("ovary_count",header=T,row.name=1,sep="\t")
+ovary<- CreateSeuratObject(counts = ovary_count, project = "ovary")
+ovary[["percent.mt"]] <- PercentageFeatureSet(ovary, pattern = "^MT-")
+ovary<- NormalizeData(ovary, normalization.method = "LogNormalize", scale.factor = 10000)
+ovary<- FindVariableFeatures(ovary, selection.method = "vst", nfeatures = 2100)
+all.genes <- rownames(ovary)
+ovary<- ScaleData(ovary, features = all.genes,vars.to.regress = "percent.mt")
+ovary<- RunPCA(ovary, features = VariableFeatures(object = ovary))
+ovary@metadata$age<-ovary_metadata$age
+ovary@metadata$group<-ovary_metadata$group
+ovary <- ovary %>% RunHarmony("age", plot_convergence = TRUE)
+ovary <- ovary %>% RunUMAP(reduction = "harmony", dims = 1:15) %>% FindNeighbors(reduction = "harmony", dims = 1:15) %>% FindClusters(resolution = 0.1) %>% identity()
+DimPlot(ovary,pt.size = .5)
+DimPlot(ovary,pt.size = .5,split.by="group")
+DimPlot(ovary,pt.size = .5,split.by="age")
+ovary_roc.markers <- FindAllMarkers(ovary, only.pos = TRUE, min.pct = 0.25, logfc.threshold = 0.25,test.use = "roc")
+new.cluster.ids <- c("Stromal_cell", "Blood_endothelial_cell", "Granulosa_cell", "Smooth_muscle_cell", "Immune_cell", "Lymphatic_endothelial_cell",
+    "Epithelial_cell", "Theca_cell")
+names(new.cluster.ids) <- levels(ovary)
+ovary <- RenameIdents(ovary, new.cluster.ids)
+DimPlot(ovary, reduction = "umap", label = TRUE, pt.size = 0.5)
