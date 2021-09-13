@@ -94,3 +94,5 @@ ovary_aging_logfc<-ovary_aging_logfc[,-1]
 ovary_aging_logfc<-merge(ovary_aging_logfc,TC_aging_logfc,by=0,all=F)
 rownames(ovary_aging_logfc)<-ovary_aging_logfc$Row.names
 ovary_aging_logfc<-ovary_aging_logfc[,-1]
+colnames(ovary_aging_logfc)<-c("SC","BEC","GC","SMC","IC","LEC","EpiC","TC")
+write.table(ovary_aging_logfc,"ovary_aging_logfc",sep = "\t")
