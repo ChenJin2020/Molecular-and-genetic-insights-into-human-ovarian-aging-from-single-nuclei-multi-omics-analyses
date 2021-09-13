@@ -56,3 +56,20 @@ SMC_aging_logfc<-FindMarkers(ovary,subset.ident = "Smooth_muscle_cell",ident.1 =
 IC_aging_logfc<-FindMarkers(ovary,subset.ident = "Immune_cell",ident.1 = "old",ident.2 = "young",features = all.genes,group.by = "group",logfc.threshold = -Inf,min.pct = -Inf,test.use = "MAST")
 LEC_aging_logfc<-FindMarkers(ovary,subset.ident = "Lymphatic_endothelial_cell",ident.1 = "old",ident.2 = "young",features = all.genes,group.by = "group",logfc.threshold = -Inf,min.pct = -Inf,test.use = "MAST")
 EpiC_aging_logfc<-FindMarkers(ovary,subset.ident = "Epithelial_cell",ident.1 = "old",ident.2 = "young",features = all.genes,group.by = "group",logfc.threshold = -Inf,min.pct = -Inf,test.use = "MAST")
+TC_aging_logfc<-FindMarkers(ovary,subset.ident = "Theca_cell",ident.1 = "old",ident.2 = "young",features = all.genes,group.by = "group",logfc.threshold = -Inf,min.pct = -Inf,test.use = "MAST")
+write.table(SC_aging_logfc,"SC_aging_logfc",sep = "\t")
+write.table(BEC_aging_logfc,"BEC_aging_logfc",sep = "\t")
+write.table(GC_aging_logfc,"GC_aging_logfc",sep = "\t")
+write.table(SMC_aging_logfc,"SMC_aging_logfc",sep = "\t")
+write.table(IC_aging_logfc,"IC_aging_logfc",sep = "\t")
+write.table(LEC_aging_logfc,"LEC_aging_logfc",sep = "\t")
+write.table(EpiC_aging_logfc,"EpiC_aging_logfc",sep = "\t")
+write.table(TC_aging_logfc,"TC_aging_logfc",sep = "\t")
+SC_aging_logfc<-SC_aging_logfc[,"avg_log2FC",drop=F]
+BEC_aging_logfc<-BEC_aging_logfc[,"avg_log2FC",drop=F]
+GC_aging_logfc<-GC_aging_logfc[,"avg_log2FC",drop=F]
+SMC_aging_logfc<-SMC_aging_logfc[,"avg_log2FC",drop=F]
+IC_aging_logfc<-IC_aging_logfc[,"avg_log2FC",drop=F]
+LEC_aging_logfc<-LEC_aging_logfc[,"avg_log2FC",drop=F]
+EpiC_aging_logfc<-EpiC_aging_logfc[,"avg_log2FC",drop=F]
+TC_aging_logfc<-TC_aging_logfc[,"avg_log2FC",drop=F]
