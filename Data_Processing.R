@@ -48,6 +48,14 @@ IC_aging_markers<-FindMarkers(ovary, ident.1 = "old", ident.2 ="young",subset.id
 LEC_aging_markers<-FindMarkers(ovary, ident.1 = "old", ident.2 ="young",subset.ident = "Lymphatic_endothelial_cell",group.by="group", min.pct = 0.25,logfc.threshold=0.25,test.use="MAST")
 EpiC_aging_markers<-FindMarkers(ovary, ident.1 = "old", ident.2 ="young",subset.ident = "Epithelial_cell",group.by="group", min.pct = 0.25,logfc.threshold=0.25,test.use="MAST")
 TC_aging_markers<-FindMarkers(ovary, ident.1 = "old", ident.2 ="young",subset.ident = "Theca_cell",group.by="group", min.pct = 0.25,logfc.threshold=0.25,test.use="MAST")
+write.table(SC_aging_markes,"SC_aging_markers",sep="\t")
+write.table(SC_aging_markes,"BEC_aging_markers",sep="\t")
+write.table(SC_aging_markes,"GC_aging_markers",sep="\t")
+write.table(SC_aging_markes,"SMC_aging_markers",sep="\t")
+write.table(SC_aging_markes,"IC_aging_markers",sep="\t")
+write.table(SC_aging_markes,"LEC_aging_markers",sep="\t")
+write.table(SC_aging_markes,"EpiC_aging_markers",sep="\t")
+write.table(SC_aging_markes,"TC_aging_markers",sep="\t")
 
 SC_aging_logfc<-FindMarkers(ovary,subset.ident = "Stromal_cell",ident.1 = "old",ident.2 = "young",features = all.genes,group.by = "group",logfc.threshold = -Inf,min.pct = -Inf,test.use = "MAST")
 BEC_aging_logfc<-FindMarkers(ovary,subset.ident = "Blood_endothelial_cell",ident.1 = "old",ident.2 = "young",features = all.genes,group.by = "group",logfc.threshold = -Inf,min.pct = -Inf,test.use = "MAST")
@@ -96,3 +104,12 @@ rownames(ovary_aging_logfc)<-ovary_aging_logfc$Row.names
 ovary_aging_logfc<-ovary_aging_logfc[,-1]
 colnames(ovary_aging_logfc)<-c("SC","BEC","GC","SMC","IC","LEC","EpiC","TC")
 write.table(ovary_aging_logfc,"ovary_aging_logfc",sep = "\t")
+***************ovary_aging_DEG_heatmap************************
+library(pheatmap)
+library(RColorBrewer)
+DEG_list<-read.table("DEG_list.txt",sep = "\t",row.names = 1,header = T)
+ovary_aging_DEG<-merge(ovary_aging_logfc,DEG_list,by=0)
+rownames(ovary_aging_DEG)<-ovary_aging_DEG$Row.names
+ovary_aging_DEG<-ovary_aging_DEG[,2:9]
+ovary_aging_DEG<-ovary_aging_DEG[rownames(DEG_list),]
+pheatmap(as.matrix(ovary_aging_DEG),scale = "none",cluster_rows = F,cluster_cols = F,annotation_row = DEG_list,filename = "ovary_aging_DEG_heatmap.pdf",color=colorRampPalette(c("blue", "white", "red"))(200))
