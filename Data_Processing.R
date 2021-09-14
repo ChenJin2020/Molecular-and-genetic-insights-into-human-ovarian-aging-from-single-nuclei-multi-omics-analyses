@@ -124,7 +124,8 @@ pheatmap(as.matrix(Common_DEG),scale = "none",cluster_rows = T,cluster_cols = T,
 ***************cell_specific_DEG_heatmap************************
 cell_specific_DEG<-read.table("cell_specific_DEG",sep = "\t",row.names = 1,header = T)
 ovary_cell_specific_DEG<-merge(ovary_aging_logfc,cell_specific_DEG,by=0)
-rownames(ovary_aging_DEG)<-ovary_aging_DEG$Row.names
-ovary_aging_DEG<-ovary_aging_DEG[,2:9]
-ovary_aging_DEG<-ovary_aging_DEG[rownames(DEG_list),]
-pheatmap(as.matrix(ovary_aging_DEG),scale = "none",cluster_rows = F,cluster_cols = F,annotation_row = DEG_list,filename = "ovary_aging_DEG_heatmap.pdf",color=colorRampPalette(c("blue", "white", "red"))(200))
+rownames(ovary_cell_specific_DEG)<-ovary_cell_specific_DEG$Row.names
+ovary_cell_specific_DEG<-ovary_cell_specific_DEG[,2:9]
+ovary_cell_specific_DEG<-ovary_cell_specific_DEG[rownames(cell_specific_DEG),]
+pheatmap(as.matrix(ovary_cell_specific_DEG),scale = "none",cluster_rows = F,cluster_cols = F,filename = "ovary_cell_specific_DEG_heatmap.pdf",color=colorRampPalette(c("blue", "white", "red"))(200))
+
