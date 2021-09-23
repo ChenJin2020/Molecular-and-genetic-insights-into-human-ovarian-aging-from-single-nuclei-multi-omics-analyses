@@ -1,0 +1,28 @@
+*******************cell type association GWAS analysis*********************
+wget https://www.reprogen.org/reprogen_ANM_201K_170621.txt.gz
+gzip -d reprogen_ANM_201K_170621.txt.gz
+
+library(MAGMA.Celltyping)
+
+dbSNP<-read.table("./dbSNP151_GRCh37_without_Y.txt",header = T,sep = "\t")
+GWAS<-read.table("./nature2021/reprogen_ANM_201K_170621.txt",header = T,sep = "\t")
+GWAS_SNP<-merge(dbSNP,GWAS,by=1)
+GWAS_SNP<-GWAS_SNP[,-c(1,2)]
+rownames(GWAS_SNP)<-GWAS_SNP$RSID
+GWAS_SNP<-GWAS_SNP[,-1]
+write.table(GWAS_SNP,"./nature2021/GWAS_SNP.tsv",sep = "\t")
+awk '{print $1"\t"$2"\t"$3"\t"toupper($4)"\t"toupper($5)"\t"$6"\t"$7"\t"$8"\t"toupper($9)"\t"$10}' GWAS_SNP.tsv > GWAS_SNP.tsv1
+mv GWAS_SNP.tsv1 GWAS_SNP.tsv
+storage_dir <- "./genome"
+genome_ref_dir = file.path(storage_dir,"g1000_eur")
+if(!file.exists(sprintf("%s/g1000_eur.bed",genome_ref_dir))){
+    download.file("https://ctg.cncr.nl/software/MAGMA/ref_data/g1000_eur.zip",destfile=sprintf("%s.zip",genome_ref_dir))
+    unzip(sprintf("%s.zip",genome_ref_dir),exdir=genome_ref_dir)
+}
+genome_ref_path = sprintf("%s/g1000_eur",genome_ref_dir)
+gwas_sumstats_path = file.path("./GWAS_SNP.tsv")
+tmpSumStatsPath = MungeSumstats::format_sumstats(path=gwas_sumstats_path,ref_genome ="GRCh37")
+
+gwas_sumstats_path_formatted = gsub(".tsv",".formatted.tsv",gwas_sumstats_path)
+file.copy(from=tmpSumStatsPath,to=gwas_sumstats_path_formatted,overwrite = TRUE)
+genesOutPath = map.snps.to.genes(path_formatted=gwas_sumstats_path_formatted,genome_build ="GRCh37",genome_ref_path=genome_ref_path)
