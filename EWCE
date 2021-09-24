@@ -1,1 +1,10 @@
 ********************************EWCE*******************************************8
+library(EWCE)
+ovary <- readRDS("ovary.rds")
+ovary_count<-ovary[["RNA"]]@counts
+ovary_metadata<-read.table("ovary_metadata.txt",header = T,sep = "\t")
+ovary_sce<- SingleCellExperiment::SingleCellExperiment(assays=list(counts=ovary_count),colData=ovary_metadata)
+ovary_sce_DROPPED = drop_uninformative_genes(exp=ovary_count,level2annot = ovary_sce$level1class)
+annotLevels = list(level1class=ovary_sce$level1class)
+ovary_cell_specificity = generate_celltype_data(exp=ovary_sce_DROPPED,annotLevels=annotLevels,groupName="ovary_cell_specificity",savePath='./')
+load(ovary_cell_specificity[1])
